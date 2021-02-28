@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <cstring>
 //Debugging macro
 //#define VEC_DEBUG
 
@@ -55,6 +56,8 @@ namespace spt {
         T &back() const;
 
         T &operator[](memorySize index) const;
+
+        vector<T> &operator=(const vector &lhs);
 
         ~vector();
 
@@ -190,6 +193,17 @@ namespace spt {
     void vector<T>::shrink_to_fit() {
         m_data = static_cast<T*>(std::realloc(m_data, sizeof(T) * m_size));
         m_maxAlloc = m_size;
+    }
+
+    template<class T>
+    vector<T> &vector<T>::operator=(const vector &lhs) {
+        this->m_size = lhs.m_size;
+        if(this->m_maxAlloc < lhs.m_maxAlloc) {
+            this->m_maxAlloc = lhs.m_maxAlloc;
+            this->m_data = static_cast<T*>(std::realloc(this->m_data, sizeof(T) * this->m_size));
+        }
+        std::memcpy(this->m_data, lhs.m_data, this->m_size);
+        return *this;
     }
 
 } // namespace spt
