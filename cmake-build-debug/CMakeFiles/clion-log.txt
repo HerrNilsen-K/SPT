@@ -1,0 +1,4 @@
+/home/karl/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7148.70/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=make -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G "CodeBlocks - Unix Makefiles" "/home/karl/Desktop/c c++/SPT"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/karl/Desktop/c c++/SPT/cmake-build-debug

@@ -1,0 +1,3 @@
+/home/karl/Desktop/c c++/SPT/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/karl/Desktop/c c++/SPT/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/karl/Desktop/c c++/SPT/cmake-build-debug/CMakeFiles/SPT.dir
