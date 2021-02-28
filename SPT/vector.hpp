@@ -42,6 +42,12 @@ namespace spt {
 
         T *end() const;
 
+        T *data() const;
+
+        void clear();
+
+        void shrink_to_fit();
+
         T &at(memorySize index) const;
 
         T &front() const;
@@ -168,6 +174,22 @@ namespace spt {
     template<class T>
     vector<T>::~vector() {
         free(m_data);
+    }
+
+    template<class T>
+    T *vector<T>::data() const {
+        return m_data;
+    }
+
+    template<class T>
+    void vector<T>::clear() {
+        m_size = 0;
+    }
+
+    template<class T>
+    void vector<T>::shrink_to_fit() {
+        m_data = static_cast<T*>(std::realloc(m_data, sizeof(T) * m_size));
+        m_maxAlloc = m_size;
     }
 
 } // namespace spt
