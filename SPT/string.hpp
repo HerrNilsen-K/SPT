@@ -24,9 +24,6 @@ namespace spt {
         friend std::ostream &operator<<(std::ostream &os, const string &string);
 
     private:
-        template<uint64_t N>
-        constexpr uint64_t c_strlen(char const(&)[N]);
-
         uint64_t strlen(const char *str) const;
 
     private:
@@ -41,15 +38,11 @@ namespace spt {
         //std::strcpy(m_string.data(), str);
     }
 
-    template<uint64_t N>
-    constexpr uint64_t c_strlen(char const (&)[N]) {
-        return N - 1;
-    }
-
     uint64_t string::strlen(const char *str) const {
-        uint64_t i = 0;
-        while (str[i])++i;
-        return i;
+        const char *begin = str;
+        while(*str)
+            ++str;
+        return str - begin;
     }
 
     std::ostream &operator<<(std::ostream &os, const spt::string &string) {
