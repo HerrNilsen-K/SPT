@@ -14,12 +14,15 @@ namespace spt {
 
     class string {
     public:
+        string();
         string(const char *str);
+        string(const string &str);
+
 
         const unsigned char* c_string() const;
 
-        string &operator=(const string &str);
 
+        string &operator=(const string &str);
         unsigned char &operator[](uint64_t index) const;
         friend std::ostream &operator<<(std::ostream &os, const string &string);
 
@@ -67,6 +70,19 @@ namespace spt {
 
     unsigned char &string::operator[](uint64_t index) const {
         return m_string[index];
+    }
+
+    string::string() :
+    m_size(0){}
+
+    string::string(const string &str) {
+        this->m_size = str.m_size;
+        this->m_string = str.m_string;
+        if(this->m_string.size() > this->m_string.capacity()){
+            this->m_string[this->m_string.size() + 1] = '\0';
+        } else {
+            this->m_string.push_back('\0');
+        }
     }
 
 } //namespace spt

@@ -13,5 +13,8 @@ int main(int argc, char const *argv[]) {
         str[i] = i + 65;
     }
     std::cout << str << std::endl;
+
+    spt::string cpy(str);
+    std::cout << cpy << std::endl;
     return 0;
 }
