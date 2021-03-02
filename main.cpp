@@ -5,6 +5,7 @@
 #include "SPT/string.hpp"
 #include <string>
 
+//Test comment
 int main(int argc, char const *argv[]) {
     spt::string str("Hello World");
     str = "Hello";
