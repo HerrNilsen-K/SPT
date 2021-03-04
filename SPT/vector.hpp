@@ -21,7 +21,7 @@ namespace spt {
     public:
         vector();
 
-        vector(uint32_t size);
+        explicit vector(uint32_t size);
 
         vector(uint32_t size, T data);
 

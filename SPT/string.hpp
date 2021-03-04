@@ -16,7 +16,7 @@ namespace spt {
     public:
         string();
 
-        string(const char *str);
+        explicit string(const char *str);
 
         string(const string &str);
 
@@ -25,6 +25,8 @@ namespace spt {
 
         void erase(int64_t pos, int64_t n);
 
+        unsigned char * begin() const;
+        unsigned char * end() const;
 
         string &operator=(const string &str);
 
@@ -95,6 +97,14 @@ namespace spt {
         m_string.erase(m_string.begin() + pos, m_string.begin() + pos + n);
         m_size -= n;
         m_string[m_size] = '\0';
+    }
+
+    unsigned char *string::begin() const {
+        return m_string.data();
+    }
+
+    unsigned char *string::end() const {
+        return m_string.data() + m_size;
     }
 
 } //namespace spt

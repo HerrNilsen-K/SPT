@@ -32,6 +32,9 @@ int main(int argc, char const *argv[]) {
     std::cout << s << std::endl;
     spt::string ss("Hello");
     ss.erase(2, 1);
-    std::cout << ss;
+    std::cout << ss << std::endl;
+    for(auto c : ss){
+        std::cout << c;
+    }
     return 0;
 }
