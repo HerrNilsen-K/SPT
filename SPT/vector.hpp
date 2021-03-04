@@ -49,6 +49,10 @@ namespace spt {
 
         void shrink_to_fit();
 
+        void erase(T *index);
+
+        void erase(T *first, T *last);
+
         T &at(memorySize index) const;
 
         T &front() const;
@@ -191,19 +195,41 @@ namespace spt {
 
     template<class T>
     void vector<T>::shrink_to_fit() {
-        m_data = static_cast<T*>(std::realloc(m_data, sizeof(T) * m_size));
+        m_data = static_cast<T *>(std::realloc(m_data, sizeof(T) * m_size));
         m_maxAlloc = m_size;
     }
 
     template<class T>
     vector<T> &vector<T>::operator=(const vector &lhs) {
         this->m_size = lhs.m_size;
-        if(this->m_maxAlloc < lhs.m_maxAlloc) {
+        if (this->m_maxAlloc < lhs.m_maxAlloc) {
             this->m_maxAlloc = lhs.m_maxAlloc;
-            this->m_data = static_cast<T*>(std::realloc(this->m_data, sizeof(T) * this->m_size));
+            this->m_data = static_cast<T *>(std::realloc(this->m_data, sizeof(T) * this->m_size));
         }
         std::memcpy(this->m_data, lhs.m_data, this->m_size);
         return *this;
+    }
+
+    template<class T>
+    void vector<T>::erase(T *index) {
+        for (auto i = this->begin() + *index; i < this->end(); ++i) {
+            m_data[*i] = m_data[*i + 1];
+        }
+        --m_size;
+    }
+
+    template<class T>
+    void vector<T>::erase(T *first, T *last) {
+        /*for (auto i = this->begin() + *first; i < this->begin() + *last; ++i) {
+            m_data[*i] = m_data[*i + 1];
+        }
+         */
+        int i = 0;
+        for (; last != this->end(); ++first, ++last, ++i) {
+            *first = std::move(*last);
+        }
+        m_size -= i + 1;
+
     }
 
 } // namespace spt

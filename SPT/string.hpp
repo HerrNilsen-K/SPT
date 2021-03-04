@@ -15,15 +15,21 @@ namespace spt {
     class string {
     public:
         string();
+
         string(const char *str);
+
         string(const string &str);
 
 
-        const unsigned char* c_string() const;
+        const unsigned char *c_string() const;
+
+        void erase(int64_t pos, int64_t n);
 
 
         string &operator=(const string &str);
+
         unsigned char &operator[](uint64_t index) const;
+
         friend std::ostream &operator<<(std::ostream &os, const string &string);
 
     private:
@@ -43,7 +49,7 @@ namespace spt {
 
     uint64_t string::strlen(const char *str) const {
         const char *begin = str;
-        while(*str)
+        while (*str)
             ++str;
         return str - begin;
     }
@@ -56,7 +62,7 @@ namespace spt {
     string &string::operator=(const string &str) {
         this->m_size = str.m_size;
         this->m_string = str.m_string;
-        if(this->m_string.size() > this->m_string.capacity()){
+        if (this->m_string.size() > this->m_string.capacity()) {
             this->m_string[this->m_string.size() + 1] = '\0';
         } else {
             this->m_string.push_back('\0');
@@ -73,16 +79,22 @@ namespace spt {
     }
 
     string::string() :
-    m_size(0){}
+            m_size(0) {}
 
     string::string(const string &str) {
         this->m_size = str.m_size;
         this->m_string = str.m_string;
-        if(this->m_string.size() > this->m_string.capacity()){
+        if (this->m_string.size() > this->m_string.capacity()) {
             this->m_string[this->m_string.size() + 1] = '\0';
         } else {
             this->m_string.push_back('\0');
         }
+    }
+
+    void string::erase(int64_t pos, int64_t n) {
+        m_string.erase(m_string.begin() + pos, m_string.begin() + pos + n);
+        m_size -= n;
+        m_string[m_size] = '\0';
     }
 
 } //namespace spt

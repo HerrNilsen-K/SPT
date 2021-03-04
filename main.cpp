@@ -4,17 +4,33 @@
 
 #include "SPT/string.hpp"
 #include <string>
+#include <algorithm>
 
 int main(int argc, char const *argv[]) {
-    spt::string str("Hello World");
-    str = "Hello";
-    str = "Super Hello World";
+    spt::vector<int> v;
     for (int i = 0; i < 5; ++i) {
-        str[i] = i + 65;
+        v.push_back(i);
     }
-    std::cout << str << std::endl;
 
-    spt::string cpy(str);
-    std::cout << cpy << std::endl;
+    std::cout << "Old Vector: ";
+    for (auto x : v) {
+        std::cout << x << ' ';
+    }
+    std::cout << std::endl;
+
+    v.erase(v.begin(), v.begin() + 3);
+
+    std::cout << "New Vector: ";
+    for (auto x : v) {
+        std::cout << x << ' ';
+    }
+    std::cout << std::endl;
+
+    std::string s("Hello");
+    s.erase( 2, 1);
+    std::cout << s << std::endl;
+    spt::string ss("Hello");
+    ss.erase(2, 1);
+    std::cout << ss;
     return 0;
 }
