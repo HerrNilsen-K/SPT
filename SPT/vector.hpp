@@ -11,7 +11,7 @@
 //Debugging macro
 //#define VEC_DEBUG
 
-namespace spt {
+namespace spt1 {
 
     template<class T>
     class vector {
@@ -232,6 +232,42 @@ namespace spt {
 
     }
 
-} // namespace spt
+} // namespace spt1
 
-#endif //SPT_VECTOR_HPP
+namespace spt2 {
+    template<class T>
+    class allocator {
+
+    };
+
+    template<class T, class alloc = allocator<T>>
+    class vector {
+    private:
+        using sizeType_t = uint64_t;
+
+        std::unique_ptr<T[]> m_dataContainer{nullptr};
+        sizeType_t m_dataSize{};
+        //Allocated space is counted as (Allocated bytes / sizeof(T))
+        sizeType_t m_allocated{};
+    public:
+        vector();
+
+        vector<T, alloc> &push_back(T data);
+    };
+
+    template<class T, class alloc>
+    vector<T, alloc> &vector<T, alloc>::push_back(T data) {
+        ++m_dataSize;
+        if(m_dataSize > m_allocated) {
+            //Use allocator to allocate memory
+        }
+
+        return *this;
+    }
+
+    template<class T, class alloc>
+    vector<T, alloc>::vector() = default;
+
+}
+
+#endif //__SPT_VECTOR_HPP__

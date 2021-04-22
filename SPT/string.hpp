@@ -10,7 +10,7 @@
 #include <ostream>
 #include "vector.hpp"
 
-namespace spt {
+namespace spt1 {
 
     class string {
     public:
@@ -38,7 +38,7 @@ namespace spt {
         uint64_t strlen(const char *str) const;
 
     private:
-        spt::vector<unsigned char> m_string;
+        spt1::vector<unsigned char> m_string;
         uint64_t m_size;
     };
 
@@ -56,7 +56,7 @@ namespace spt {
         return str - begin;
     }
 
-    std::ostream &operator<<(std::ostream &os, const spt::string &string) {
+    std::ostream &operator<<(std::ostream &os, const spt1::string &string) {
         os << string.m_string.data();
         return os;
     }
@@ -107,6 +107,6 @@ namespace spt {
         return m_string.data() + m_size;
     }
 
-} //namespace spt
+} //namespace spt1
 
 #endif //SPT_STRING_HPP
