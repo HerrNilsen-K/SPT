@@ -25,6 +25,8 @@ namespace spt1 {
 
         vector(uint32_t size, T data);
 
+        vector(vector &&v);
+
         void push_back(T data);
 
         void pop_back();
@@ -63,7 +65,21 @@ namespace spt1 {
 
         vector<T> &operator=(const vector &lhs);
 
+        vector<T> &operator=(vector &&lhs) noexcept;
+
+        bool operator==(const vector &rhs) const;
+
+        bool operator!=(const vector &rhs) const;
+
+                bool operator>(const vector &rhs) const;
+
+        bool operator<=(const vector &rhs) const;
+
+        bool operator>=(const vector &rhs) const;
+
         ~vector();
+
+        bool operator<(const vector &rhs) const;
 
     private:
         T *m_data;
@@ -104,7 +120,7 @@ namespace spt1 {
 #ifdef VEC_DEBUG
             std::cout << std::endl
                       << "\tMemory allocated: " << m_maxAlloc << std::endl
-                      << "\tSize: " << m_size << std::endl;
+                      << "\tSize: " << m_length << std::endl;
 #endif
         } else {
             m_data[m_size - 1] = data;
@@ -232,6 +248,62 @@ namespace spt1 {
 
     }
 
+    template<class T>
+    vector<T>::vector(vector &&v) {
+        this->m_size = v.m_size;
+        this->m_maxAlloc = v.m_maxAlloc;
+        this->m_data = v.m_data;
+        v.m_data = nullptr;
+    }
+
+    template<class T>
+    vector<T> &vector<T>::operator=(vector &&lhs) noexcept {
+        this->m_size = lhs.m_size;
+        this->m_maxAlloc = lhs.m_maxAlloc;
+        this->m_data = lhs.m_data;
+        lhs.m_data = nullptr;
+        return *this;
+    }
+
+    template<class T>
+    bool vector<T>::operator==(const vector &rhs) const {
+        T *first = this->begin();
+        T *last = this->end();
+        T *second = rhs.begin();
+        while (first != last) {
+            if (*first != *second)
+                return false;
+            ++first;
+            ++second;
+        }
+        return true;
+    }
+
+    template<class T>
+    bool vector<T>::operator!=(const vector &rhs) const {
+        return rhs != *this;
+    }
+
+    template<class T>
+    bool vector<T>::operator<(const vector &rhs) const {
+        return m_size < rhs.m_size;
+    }
+
+    template<class T>
+    bool vector<T>::operator>(const vector &rhs) const {
+        return rhs < *this;
+    }
+
+    template<class T>
+    bool vector<T>::operator<=(const vector &rhs) const {
+        return !(rhs < *this);
+    }
+
+    template<class T>
+    bool vector<T>::operator>=(const vector &rhs) const {
+        return !(*this < rhs);
+    }
+
 } // namespace spt1
 
 namespace spt2 {
@@ -258,7 +330,7 @@ namespace spt2 {
     template<class T, class alloc>
     vector<T, alloc> &vector<T, alloc>::push_back(T data) {
         ++m_dataSize;
-        if(m_dataSize > m_allocated) {
+        if (m_dataSize > m_allocated) {
             //Use allocator to allocate memory
         }
 
