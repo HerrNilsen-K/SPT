@@ -12,6 +12,7 @@ int main(int argc, char const *argv[]) {
     for (auto i : v) {
         std::cout << i << ' ';
     }
+    std::cout << std::endl << v.size() << ' ' << v.capacity();
 
     return 0;
 }

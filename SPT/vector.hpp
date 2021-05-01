@@ -194,6 +194,15 @@ namespace spt1 {
 
     template<class T>
     T &vector<T>::at(memorySize index) const {
+        if (index >= m_size) {
+            //TODO Remove std::string
+            std::string error("Index (");
+            error += std::to_string(index);
+            error += ") is <= than this->size() (";
+            error += std::to_string(this->size());
+            error += ')';
+            throw std::out_of_range(error);
+        }
         return m_data[index];
     }
 
@@ -336,10 +345,7 @@ namespace spt1 {
     vector<T>::vector(std::initializer_list<T> l)
             :m_size(0), m_maxAlloc(0) {
         resize(l.size());
-        auto it = l.begin();
-        for (T &i : *this) {
-            i = *(it++);
-        }
+        std::copy(l.begin(), l.end(), this->begin());
     }
 
     template<class T>
