@@ -16,13 +16,17 @@ namespace spt1 {
     template<class T>
     class basic_string {
     public:
+        using iterator = T *;
+        using reverse_iterator = std::reverse_iterator<iterator>;
+
+    public:
         basic_string();
 
         explicit basic_string(const T *str);
 
         basic_string(const basic_string &str);
 
-        basic_string(basic_string &&str);
+        basic_string(basic_string &&str) noexcept;
 
         static void strcpy(T *dest, T *src);
 
@@ -30,9 +34,13 @@ namespace spt1 {
 
         void erase(int64_t pos, int64_t n);
 
-        T *begin() const;
+        iterator begin() const;
 
-        T *end() const;
+        iterator end() const;
+
+        reverse_iterator rbegin() const;
+
+        reverse_iterator rend() const;
 
         basic_string &operator=(const basic_string &str);
 
@@ -85,7 +93,7 @@ namespace spt1 {
     }
 
     template<class T>
-    basic_string<T>::basic_string(basic_string &&str) {
+    basic_string<T>::basic_string(basic_string &&str) noexcept {
         this->m_length = str.m_length;
         this->m_string = std::move(str.m_string);
         str.m_string.clear();
@@ -137,13 +145,13 @@ namespace spt1 {
     }
 
     template<class T>
-    T *basic_string<T>::begin() const {
-        return m_string.data();
+    typename basic_string<T>::iterator basic_string<T>::begin() const {
+        return m_string.begin();
     }
 
     template<class T>
-    T *basic_string<T>::end() const {
-        return m_string.data() + m_length;
+    typename basic_string<T>::iterator basic_string<T>::end() const {
+        return m_string.end();
     }
 
     template<class T>
@@ -189,6 +197,16 @@ namespace spt1 {
             ++cdest;
             ++csrc;
         }
+    }
+
+    template<class T>
+    typename basic_string<T>::reverse_iterator basic_string<T>::rbegin() const {
+        return m_string.rbegin();
+    }
+
+    template<class T>
+    typename basic_string<T>::reverse_iterator basic_string<T>::rend() const {
+        return m_string.rend();
     }
 
 } //namespace spt1

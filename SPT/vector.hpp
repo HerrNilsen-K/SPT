@@ -15,8 +15,10 @@ namespace spt1 {
 
     template<class T>
     class vector {
-    private:
+    public:
         using memorySize = uint64_t;
+        using iterator = T *;
+        using reverse_iterator = std::reverse_iterator<iterator>;
 
     public:
         vector();
@@ -25,7 +27,9 @@ namespace spt1 {
 
         vector(uint32_t size, T data);
 
-        vector(vector &&v);
+        vector(vector &&v) noexcept;
+
+        //TODO Initializer list constructor
 
         void push_back(T data);
 
@@ -35,15 +39,19 @@ namespace spt1 {
 
         void resize(memorySize size);
 
-        memorySize capacity() const;
+        [[nodiscard]] memorySize capacity() const;
 
-        memorySize size() const;
+        [[nodiscard]] memorySize size() const;
 
-        memorySize max_size() const;
+        [[nodiscard]] memorySize max_size() const;
 
-        T *begin() const;
+        iterator begin() const;
 
-        T *end() const;
+        iterator end() const;
+
+        reverse_iterator rbegin() const;
+
+        reverse_iterator rend() const;
 
         T *data() const;
 
@@ -71,7 +79,7 @@ namespace spt1 {
 
         bool operator!=(const vector &rhs) const;
 
-                bool operator>(const vector &rhs) const;
+        bool operator>(const vector &rhs) const;
 
         bool operator<=(const vector &rhs) const;
 
@@ -165,12 +173,12 @@ namespace spt1 {
     }
 
     template<class T>
-    T *vector<T>::begin() const {
+    typename vector<T>::iterator vector<T>::begin() const {
         return this->m_data;
     }
 
     template<class T>
-    T *vector<T>::end() const {
+    typename vector<T>::iterator vector<T>::end() const {
         return this->m_data + m_size;
     }
 
@@ -249,7 +257,7 @@ namespace spt1 {
     }
 
     template<class T>
-    vector<T>::vector(vector &&v) {
+    vector<T>::vector(vector &&v) noexcept {
         this->m_size = v.m_size;
         this->m_maxAlloc = v.m_maxAlloc;
         this->m_data = v.m_data;
@@ -302,6 +310,16 @@ namespace spt1 {
     template<class T>
     bool vector<T>::operator>=(const vector &rhs) const {
         return !(*this < rhs);
+    }
+
+    template<class T>
+    typename vector<T>::reverse_iterator vector<T>::rbegin() const {
+        return std::make_reverse_iterator(end());
+    }
+
+    template<class T>
+    typename vector<T>::reverse_iterator vector<T>::rend() const {
+        return std::make_reverse_iterator(begin());
     }
 
 } // namespace spt1
