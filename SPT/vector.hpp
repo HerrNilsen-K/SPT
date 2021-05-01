@@ -30,7 +30,6 @@ namespace spt1 {
 
         vector(vector &&v) noexcept;
 
-        //TODO Initializer list constructor
         vector(std::initializer_list<T> l);
 
         //Add element at the back
@@ -286,7 +285,6 @@ namespace spt1 {
 
     template<class T>
     bool vector<T>::operator==(const vector &rhs) {
-        //TODO Pointer arethmetic seems wrong
         iterator first = this->begin();
         iterator last = this->end();
         const_iterator second = rhs.cbegin();
