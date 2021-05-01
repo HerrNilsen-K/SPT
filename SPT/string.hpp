@@ -54,7 +54,7 @@ namespace spt1 {
 
         bool operator>=(const basic_string &rhs) const;
 
-        bool operator==(const basic_string &rhs) const;
+        bool operator==(const basic_string &rhs);
 
         bool operator!=(const basic_string &rhs) const;
 
@@ -155,7 +155,7 @@ namespace spt1 {
     }
 
     template<class T>
-    bool basic_string<T>::operator==(const basic_string &rhs) const {
+    bool basic_string<T>::operator==(const basic_string &rhs) {
         return this->m_string == rhs.m_string;
     }
 

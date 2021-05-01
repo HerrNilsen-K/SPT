@@ -8,8 +8,9 @@ int main(int argc, char const *argv[]) {
     spt1::basic_string<char> ss("Hell");
     std::cout << s << " == " << ss << ' ' << (s == ss) << std::endl;
 
-    for (auto i = s.rbegin(); i < s.rend(); ++i) {
-        std::cout << *i << std::flush;
+    spt1::vector<int> v{1, 2, 3};
+    for (auto i : v) {
+        std::cout << i << ' ';
     }
 
     return 0;

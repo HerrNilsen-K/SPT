@@ -18,6 +18,7 @@ namespace spt1 {
     public:
         using memorySize = uint64_t;
         using iterator = T *;
+        using const_iterator = const T *;
         using reverse_iterator = std::reverse_iterator<iterator>;
 
     public:
@@ -30,14 +31,20 @@ namespace spt1 {
         vector(vector &&v) noexcept;
 
         //TODO Initializer list constructor
+        vector(std::initializer_list<T> l);
 
+        //Add element at the back
         void push_back(T data);
 
+        //Remove element at the back
         void pop_back();
 
         void insert(memorySize index, T data);
 
         void resize(memorySize size);
+
+        //Reverse memory
+        void reserve(memorySize size);
 
         [[nodiscard]] memorySize capacity() const;
 
@@ -45,9 +52,13 @@ namespace spt1 {
 
         [[nodiscard]] memorySize max_size() const;
 
-        iterator begin() const;
+        iterator begin();
 
-        iterator end() const;
+        iterator end();
+
+        const_iterator cbegin() const;
+
+        const_iterator cend() const;
 
         reverse_iterator rbegin() const;
 
@@ -75,7 +86,7 @@ namespace spt1 {
 
         vector<T> &operator=(vector &&lhs) noexcept;
 
-        bool operator==(const vector &rhs) const;
+        bool operator==(const vector &rhs);
 
         bool operator!=(const vector &rhs) const;
 
@@ -90,7 +101,7 @@ namespace spt1 {
         bool operator<(const vector &rhs) const;
 
     private:
-        T *m_data;
+        T *m_data = nullptr;
         memorySize m_size;
         memorySize m_maxAlloc;
     };
@@ -173,12 +184,12 @@ namespace spt1 {
     }
 
     template<class T>
-    typename vector<T>::iterator vector<T>::begin() const {
+    typename vector<T>::iterator vector<T>::begin() {
         return this->m_data;
     }
 
     template<class T>
-    typename vector<T>::iterator vector<T>::end() const {
+    typename vector<T>::iterator vector<T>::end() {
         return this->m_data + m_size;
     }
 
@@ -244,7 +255,7 @@ namespace spt1 {
 
     template<class T>
     void vector<T>::erase(T *first, T *last) {
-        /*for (auto i = this->begin() + *first; i < this->begin() + *last; ++i) {
+        /*for (auto i = this->begin() + *first; i < this->cbegin() + *last; ++i) {
             m_data[*i] = m_data[*i + 1];
         }
          */
@@ -274,10 +285,11 @@ namespace spt1 {
     }
 
     template<class T>
-    bool vector<T>::operator==(const vector &rhs) const {
-        T *first = this->begin();
-        T *last = this->end();
-        T *second = rhs.begin();
+    bool vector<T>::operator==(const vector &rhs) {
+        //TODO Pointer arethmetic seems wrong
+        iterator first = this->begin();
+        iterator last = this->end();
+        const_iterator second = rhs.cbegin();
         while (first != last) {
             if (*first != *second)
                 return false;
@@ -320,6 +332,34 @@ namespace spt1 {
     template<class T>
     typename vector<T>::reverse_iterator vector<T>::rend() const {
         return std::make_reverse_iterator(begin());
+    }
+
+    template<class T>
+    vector<T>::vector(std::initializer_list<T> l)
+            :m_size(0), m_maxAlloc(0) {
+        resize(l.size());
+        auto it = l.begin();
+        for (T &i : *this) {
+            i = *(it++);
+        }
+    }
+
+    template<class T>
+    void vector<T>::reserve(vector<T>::memorySize size) {
+        if (m_maxAlloc < size) {
+            m_maxAlloc = size;
+            m_data = static_cast<T *>(std::realloc(m_data, size * sizeof(T)));
+        }
+    }
+
+    template<class T>
+    typename vector<T>::const_iterator vector<T>::cbegin() const {
+        return this->m_data;
+    }
+
+    template<class T>
+    typename vector<T>::const_iterator vector<T>::cend() const {
+        return this->m_data + this->m_size;
     }
 
 } // namespace spt1
