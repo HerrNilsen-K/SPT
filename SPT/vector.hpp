@@ -159,13 +159,14 @@ namespace spt {
 
     template<class T>
     void vector<T>::resize(vector<T>::memorySize size) {
-        memorySize oldSize = m_size;
-        m_size = size;
-        if (oldSize < m_size) {
+        if (m_size < size) {
             memorySize newSize = sizeof(T) * m_size;
             m_data = static_cast<T *>(realloc(m_data, newSize));
             m_maxAlloc = newSize / sizeof(T);
+        } else {
+            shrink_to_fit();
         }
+        m_size = size;
     }
 
     template<class T>

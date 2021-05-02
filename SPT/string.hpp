@@ -370,7 +370,8 @@ namespace spt {
     template<class U>
     std::istream &operator>>(std::istream &is, const basic_string<U> &str) {
         char c[1024];
-        // TODO Ask Mr. Hardy if this is UB
+        // TODO make a clear function
+        //str.clear();
         is >> str.m_string.data();
         return is;
     }

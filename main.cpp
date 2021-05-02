@@ -4,7 +4,7 @@
 #include <algorithm>
 
 int main(int argc, char const *argv[]) {
-    spt::string s("Hello");
+    spt::string s("Hello ");
     spt::string ss(" World");
     std::cin >> ss;
     std::cout << ss << std::endl;
