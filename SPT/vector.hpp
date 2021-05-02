@@ -69,6 +69,8 @@ namespace spt1 {
 
         void shrink_to_fit();
 
+        void erase(memorySize index);
+
         void erase(T *index);
 
         void erase(T *first, T *last);
@@ -364,6 +366,15 @@ namespace spt1 {
     template<class T>
     typename vector<T>::const_iterator vector<T>::cend() const {
         return this->m_data + this->m_size;
+    }
+
+    template<class T>
+    void vector<T>::erase(vector::memorySize index) {
+        for (auto i = this->begin() + index; i != this->end(); ++i) {
+            //m_data[*i] = m_data[*i + 1];
+            *i = *(i + 1);
+        }
+        --m_size;
     }
 
 } // namespace spt1

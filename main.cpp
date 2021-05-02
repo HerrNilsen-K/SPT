@@ -5,14 +5,18 @@
 
 int main(int argc, char const *argv[]) {
     spt1::basic_string<char> s("Hello");
-    spt1::basic_string<char> ss("Hell");
-    std::cout << s << " == " << ss << ' ' << (s == ss) << std::endl;
-
-    spt1::vector<int> v{1, 2, 3};
-    for (auto i : v) {
-        std::cout << i << ' ';
+    spt1::basic_string<char> ss(" World");
+    spt1::basic_string<char> s2;
+    s2 = s + ss;
+    std::cout << s2 << std::endl;
+    std::string r;
+    for (auto i : s2) {
+        r += i;
     }
-    std::cout << std::endl << v.size() << ' ' << v.capacity();
+    std::cout << r << std::endl;
+    for (auto i : r) {
+        std::cout << (int) i << ' ';
+    }
 
     return 0;
 }
