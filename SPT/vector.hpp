@@ -11,7 +11,7 @@
 //Debugging macro
 //#define VEC_DEBUG
 
-namespace spt1 {
+namespace spt {
 
     template<class T>
     class vector {
@@ -59,9 +59,9 @@ namespace spt1 {
 
         const_iterator cend() const;
 
-        reverse_iterator rbegin() const;
+        reverse_iterator rbegin();
 
-        reverse_iterator rend() const;
+        reverse_iterator rend();
 
         T *data() const;
 
@@ -246,6 +246,9 @@ namespace spt1 {
 
     template<class T>
     vector<T> &vector<T>::operator=(const vector &lhs) {
+        //Handle self assigment
+        if (this == &lhs)
+            return *this;
         this->m_size = lhs.m_size;
         if (this->m_maxAlloc < lhs.m_maxAlloc) {
             this->m_maxAlloc = lhs.m_maxAlloc;
@@ -334,12 +337,12 @@ namespace spt1 {
     }
 
     template<class T>
-    typename vector<T>::reverse_iterator vector<T>::rbegin() const {
+    typename vector<T>::reverse_iterator vector<T>::rbegin() {
         return std::make_reverse_iterator(end());
     }
 
     template<class T>
-    typename vector<T>::reverse_iterator vector<T>::rend() const {
+    typename vector<T>::reverse_iterator vector<T>::rend() {
         return std::make_reverse_iterator(begin());
     }
 
@@ -377,42 +380,6 @@ namespace spt1 {
         --m_size;
     }
 
-} // namespace spt1
-
-namespace spt2 {
-    template<class T>
-    class allocator {
-
-    };
-
-    template<class T, class alloc = allocator<T>>
-    class vector {
-    private:
-        using sizeType_t = uint64_t;
-
-        std::unique_ptr<T[]> m_dataContainer{nullptr};
-        sizeType_t m_dataSize{};
-        //Allocated space is counted as (Allocated bytes / sizeof(T))
-        sizeType_t m_allocated{};
-    public:
-        vector();
-
-        vector<T, alloc> &push_back(T data);
-    };
-
-    template<class T, class alloc>
-    vector<T, alloc> &vector<T, alloc>::push_back(T data) {
-        ++m_dataSize;
-        if (m_dataSize > m_allocated) {
-            //Use allocator to allocate memory
-        }
-
-        return *this;
-    }
-
-    template<class T, class alloc>
-    vector<T, alloc>::vector() = default;
-
-}
+} // namespace spt
 
 #endif //__SPT_VECTOR_HPP__

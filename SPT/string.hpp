@@ -9,8 +9,8 @@
  *      toString()
  *      replace()
  *      toUpper/Lower
+ *      check for primitive type in template
  *  REFACTOR:
- *      use memorySize type instead of uint64_t
  */
 
 #ifndef SPT_STRING_HPP
@@ -20,21 +20,37 @@
 #include <ios>
 #include <ostream>
 #include <any>
+#include <sstream>
 #include "vector.hpp"
 
-namespace spt1 {
+namespace spt {
+    template<class T>
+    class basic_string;
 
-    void strcat(char *dest, const char *src) {
-        while (*dest)
-            dest++;
-        while ((*dest++ = *src++));
-    }
+    using string = basic_string<char>;
 
-    void strcat(char *dest, const char src) {
-        while (*dest)
-            dest++;
-        *dest = src;
-    }
+    void strcat(char *dest, const char *src);
+
+    void strcat(char *dest, const char src);
+
+    uint64_t strlen(const char *str);
+
+    basic_string<char> toString(short num);
+
+    basic_string<char> toString(int num);
+
+    basic_string<char> toString(long num);
+
+    basic_string<char> toString(long long num);
+
+    basic_string<char> toString(float num);
+
+    basic_string<char> toString(double num);
+
+    basic_string<char> toString(long double num);
+
+    void strcpy(char *dest, const char *src);
+
 
     template<class T>
     class basic_string {
@@ -43,6 +59,7 @@ namespace spt1 {
         using const_iterator = const T *;
         using reverse_iterator = std::reverse_iterator<iterator>;
         using const_reverse_iterator = std::reverse_iterator<reverse_iterator>;
+        using memorySize = typename spt::vector<T>::memorySize;
 
     public:
         basic_string();
@@ -53,13 +70,11 @@ namespace spt1 {
 
         basic_string(basic_string &&str) noexcept;
 
-        static void strcpy(char *dest, const char *src);
-
         const T *c_string() const;
 
-        void erase(int64_t pos, int64_t n);
+        void erase(memorySize pos, memorySize n);
 
-        void reserve(uint64_t n);
+        void reserve(memorySize n);
 
         iterator begin();
 
@@ -77,19 +92,19 @@ namespace spt1 {
 
         basic_string operator+(const char *str);
 
-        basic_string operator+(const char str);
+        basic_string operator+(char str);
 
         basic_string &operator+=(const basic_string &str);
 
         basic_string &operator+=(const char *str);
 
-        basic_string &operator+=(const char str);
+        basic_string &operator+=(char str);
 
         basic_string &operator=(const basic_string &str);
 
-        T &operator[](uint64_t index) const;
+        T &operator[](memorySize index) const;
 
-        T &at(uint64_t index) const;
+        T &at(memorySize index) const;
 
         [[nodiscard]] bool operator<(const basic_string &rhs) const;
 
@@ -107,11 +122,11 @@ namespace spt1 {
         friend std::ostream &operator<<(std::ostream &os, const basic_string<U> &string);
 
     private:
-        static uint64_t strlen(const char *str);
+        static memorySize strlen(const char *str);
 
     private:
-        spt1::vector<T> m_string{0};
-        uint64_t m_length = 0;
+        spt::vector<T> m_string{0};
+        memorySize m_length = 0;
     };
 
     template<class T>
@@ -133,7 +148,6 @@ namespace spt1 {
     basic_string<T>::basic_string(const T *str)
             : m_string(0), m_length(strlen(str)) {
         m_string.resize(m_length + 1);
-        //std::memcpy(m_string.data(), str, m_length);
         strcpy(m_string.data(), const_cast<T *>(str));
     }
 
@@ -146,7 +160,7 @@ namespace spt1 {
     }
 
     template<class T>
-    uint64_t basic_string<T>::strlen(const char *str) {
+    typename basic_string<T>::memorySize basic_string<T>::strlen(const char *str) {
         const char *begin = str;
         while (*str)
             ++str;
@@ -154,7 +168,7 @@ namespace spt1 {
     }
 
     template<class U>
-    std::ostream &operator<<(std::ostream &os, const spt1::basic_string<U> &string) {
+    std::ostream &operator<<(std::ostream &os, const spt::basic_string<U> &string) {
         os << string.m_string.data();
         return os;
     }
@@ -177,13 +191,13 @@ namespace spt1 {
     }
 
     template<class T>
-    T &basic_string<T>::operator[](uint64_t index) const {
+    T &basic_string<T>::operator[](memorySize index) const {
         return m_string[index];
     }
 
 
     template<class T>
-    void basic_string<T>::erase(int64_t pos, int64_t n) {
+    void basic_string<T>::erase(memorySize pos, memorySize n) {
         m_string.erase(m_string.begin() + pos, m_string.begin() + pos + n);
         m_length -= n;
         m_string[m_length] = '\0';
@@ -234,17 +248,6 @@ namespace spt1 {
     }
 
     template<class T>
-    void basic_string<T>::strcpy(char *dest, const char *src) {
-        auto cdest = dest;
-        auto csrc = src;
-        while (*csrc) {
-            *cdest = *csrc;
-            ++cdest;
-            ++csrc;
-        }
-    }
-
-    template<class T>
     typename basic_string<T>::reverse_iterator basic_string<T>::rbegin() {
         return m_string.rbegin();
     }
@@ -258,7 +261,7 @@ namespace spt1 {
     basic_string<T> basic_string<T>::operator+(const basic_string &str) {
         m_string.resize(str.m_length + m_string.size());
         m_length += str.m_length;
-        spt1::strcat(this->m_string.data(), str.m_string.data());
+        spt::strcat(this->m_string.data(), str.m_string.data());
         return *this;
     }
 
@@ -274,7 +277,7 @@ namespace spt1 {
 
 
     template<class T>
-    void basic_string<T>::reserve(uint64_t n) {
+    void basic_string<T>::reserve(memorySize n) {
         m_string.reserve(n);
     }
 
@@ -282,16 +285,16 @@ namespace spt1 {
     basic_string<T> &basic_string<T>::operator+=(const basic_string &str) {
         m_string.resize(str.m_length + m_string.size());
         m_length += str.m_length;
-        spt1::strcat(this->m_string.data(), str.m_string.data());
+        spt::strcat(this->m_string.data(), str.m_string.data());
         return *this;
     }
 
     template<class T>
     basic_string<T> &basic_string<T>::operator+=(const char *str) {
-        uint64_t len = strlen(str);
+        memorySize len = spt::strlen(str);
         m_string.resize(len + m_string.size());
         m_length += len;
-        spt1::strcat(this->m_string.data(), str);
+        spt::strcat(this->m_string.data(), str);
         return *this;
     }
 
@@ -299,16 +302,16 @@ namespace spt1 {
     basic_string<T> &basic_string<T>::operator+=(const char str) {
         m_string.resize(1 + m_string.size());
         ++m_length;
-        spt1::strcat(this->m_string.data(), str);
+        spt::strcat(this->m_string.data(), str);
         return *this;
     }
 
     template<class T>
     basic_string<T> basic_string<T>::operator+(const char *str) {
-        uint64_t len = strlen(str);
+        memorySize len = spt::strlen(str);
         m_string.resize(len + m_string.size());
         m_length += len;
-        spt1::strcat(this->m_string.data(), str);
+        spt::strcat(this->m_string.data(), str);
         return *this;
     }
 
@@ -316,16 +319,88 @@ namespace spt1 {
     basic_string<T> basic_string<T>::operator+(const char str) {
         m_string.resize(1 + m_string.size());
         ++m_length;
-        spt1::strcat(this->m_string.data(), str);
+        spt::strcat(this->m_string.data(), str);
         return *this;
     }
 
     template<class T>
-    T &basic_string<T>::at(uint64_t index) const {
+    T &basic_string<T>::at(memorySize index) const {
         return m_string.at(index);
     }
 
 
-} //namespace spt1
+    void strcat(char *dest, const char *src) {
+        while (*dest)
+            dest++;
+        while ((*dest++ = *src++));
+    }
+
+    void strcat(char *dest, const char src) {
+        while (*dest)
+            dest++;
+        *dest = src;
+    }
+
+    uint64_t strlen(const char *str) {
+        const char *n = str;
+        while (*(++n));
+        return n - str;
+    }
+
+    void strcpy(char *dest, const char *src) {
+        auto cdest = dest;
+        auto csrc = src;
+        while (*csrc) {
+            *cdest = *csrc;
+            ++cdest;
+            ++csrc;
+        }
+    }
+
+    //TODO Remove sstream for all to implementations
+    basic_string<char> spt::toString(short num) {
+        std::stringstream result;
+        result << num;
+        return string(result.str().c_str());
+    }
+
+    string toString(int num) {
+        std::stringstream result;
+        result << num;
+        return string(result.str().c_str());
+    }
+
+    basic_string<char> spt::toString(long num) {
+        std::stringstream result;
+        result << num;
+        return string(result.str().c_str());
+    }
+
+    basic_string<char> spt::toString(long long int num) {
+        std::stringstream result;
+        result << num;
+        return string(result.str().c_str());
+    }
+
+    basic_string<char> spt::toString(float num) {
+        std::stringstream result;
+        result << num;
+        return string(result.str().c_str());
+    }
+
+    basic_string<char> spt::toString(double num) {
+        std::stringstream result;
+        result << num;
+        return string(result.str().c_str());
+    }
+
+    basic_string<char> spt::toString(long double num) {
+        std::stringstream result;
+        result << num;
+        return string(result.str().c_str());
+    }
+
+
+} //namespace spt
 
 #endif //SPT_STRING_HPP
