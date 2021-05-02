@@ -8,6 +8,7 @@
  *      replace()
  *      toUpper/Lower
  *      check for primitive type in template
+ *      istream overload
  *  REFACTOR:
  */
 
@@ -61,10 +62,11 @@ namespace spt {
         using const_iterator = const T *;
         using reverse_iterator = std::reverse_iterator<iterator>;
         using const_reverse_iterator = std::reverse_iterator<reverse_iterator>;
+
         using memorySize = typename spt::vector<T>::memorySize;
 
     public:
-        basic_string();
+        basic_string() = default;
 
         explicit basic_string(const T *str);
 
@@ -115,21 +117,22 @@ namespace spt {
 
         basic_string &operator=(const basic_string &str);
 
-        T &operator[](memorySize index) const;
+        T &operator[](memorySize index) const noexcept;
 
+        //Out of bounce safe indexing
         T &at(memorySize index) const;
 
-        [[nodiscard]] bool operator<(const basic_string &rhs) const;
+        bool operator<(const basic_string &rhs) const;
 
-        [[nodiscard]] bool operator>(const basic_string &rhs) const;
+        bool operator>(const basic_string &rhs) const;
 
-        [[nodiscard]] bool operator<=(const basic_string &rhs) const;
+        bool operator<=(const basic_string &rhs) const;
 
-        [[nodiscard]] bool operator>=(const basic_string &rhs) const;
+        bool operator>=(const basic_string &rhs) const;
 
-        [[nodiscard]] bool operator==(const basic_string &rhs);
+        bool operator==(const basic_string &rhs);
 
-        [[nodiscard]] bool operator!=(const basic_string &rhs) const;
+        bool operator!=(const basic_string &rhs) const;
 
         template<class U>
         friend std::ostream &operator<<(std::ostream &os, const basic_string<U> &string);
@@ -141,10 +144,6 @@ namespace spt {
         spt::vector<T> m_string{0};
         memorySize m_length = 0;
     };
-
-    template<class T>
-    basic_string<T>::basic_string() :
-            m_length(0) {}
 
     template<class T>
     basic_string<T>::basic_string(const basic_string<T> &str) {
@@ -159,7 +158,7 @@ namespace spt {
 
     template<class T>
     basic_string<T>::basic_string(const T *str)
-            : m_string(0), m_length(strlen(str)) {
+           {
         m_string.resize(m_length + 1);
         strcpy(m_string.data(), const_cast<T *>(str));
     }

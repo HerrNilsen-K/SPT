@@ -240,8 +240,10 @@ namespace spt {
 
     template<class T>
     void vector<T>::shrink_to_fit() {
-        m_data = static_cast<T *>(std::realloc(m_data, sizeof(T) * m_size));
-        m_maxAlloc = m_size;
+        if (m_size != m_maxAlloc) {
+            m_data = static_cast<T *>(std::realloc(m_data, sizeof(T) * m_size));
+            m_maxAlloc = m_size;
+        }
     }
 
     template<class T>
