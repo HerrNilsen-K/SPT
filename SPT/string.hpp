@@ -4,12 +4,13 @@
 
 /*
  * TODO
- *  ADD operators +=
- *  ADD find()
- *  ADD toString()
- *  Replace
- *  toUpper/Lower
- *  Reverse one byte for NUL
+ *  ADD:
+ *      find()
+ *      toString()
+ *      replace()
+ *      toUpper/Lower
+ *  REFACTOR:
+ *      use memorySize type instead of uint64_t
  */
 
 #ifndef SPT_STRING_HPP
@@ -23,10 +24,16 @@
 
 namespace spt1 {
 
-    void strcat(char *dest, char *src) {
+    void strcat(char *dest, const char *src) {
         while (*dest)
             dest++;
         while ((*dest++ = *src++));
+    }
+
+    void strcat(char *dest, const char src) {
+        while (*dest)
+            dest++;
+        *dest = src;
     }
 
     template<class T>
@@ -66,23 +73,35 @@ namespace spt1 {
 
         reverse_iterator rend();
 
-        basic_string &operator+(const basic_string &str);
+        basic_string operator+(const basic_string &str);
+
+        basic_string operator+(const char *str);
+
+        basic_string operator+(const char str);
+
+        basic_string &operator+=(const basic_string &str);
+
+        basic_string &operator+=(const char *str);
+
+        basic_string &operator+=(const char str);
 
         basic_string &operator=(const basic_string &str);
 
         T &operator[](uint64_t index) const;
 
-        bool operator<(const basic_string &rhs) const;
+        T &at(uint64_t index) const;
 
-        bool operator>(const basic_string &rhs) const;
+        [[nodiscard]] bool operator<(const basic_string &rhs) const;
 
-        bool operator<=(const basic_string &rhs) const;
+        [[nodiscard]] bool operator>(const basic_string &rhs) const;
 
-        bool operator>=(const basic_string &rhs) const;
+        [[nodiscard]] bool operator<=(const basic_string &rhs) const;
 
-        bool operator==(const basic_string &rhs);
+        [[nodiscard]] bool operator>=(const basic_string &rhs) const;
 
-        bool operator!=(const basic_string &rhs) const;
+        [[nodiscard]] bool operator==(const basic_string &rhs);
+
+        [[nodiscard]] bool operator!=(const basic_string &rhs) const;
 
         template<class U>
         friend std::ostream &operator<<(std::ostream &os, const basic_string<U> &string);
@@ -236,8 +255,8 @@ namespace spt1 {
     }
 
     template<class T>
-    basic_string<T> &basic_string<T>::operator+(const basic_string &str) {
-        m_string.resize(str.m_length + m_string.size() - 1);
+    basic_string<T> basic_string<T>::operator+(const basic_string &str) {
+        m_string.resize(str.m_length + m_string.size());
         m_length += str.m_length;
         spt1::strcat(this->m_string.data(), str.m_string.data());
         return *this;
@@ -257,6 +276,53 @@ namespace spt1 {
     template<class T>
     void basic_string<T>::reserve(uint64_t n) {
         m_string.reserve(n);
+    }
+
+    template<class T>
+    basic_string<T> &basic_string<T>::operator+=(const basic_string &str) {
+        m_string.resize(str.m_length + m_string.size());
+        m_length += str.m_length;
+        spt1::strcat(this->m_string.data(), str.m_string.data());
+        return *this;
+    }
+
+    template<class T>
+    basic_string<T> &basic_string<T>::operator+=(const char *str) {
+        uint64_t len = strlen(str);
+        m_string.resize(len + m_string.size());
+        m_length += len;
+        spt1::strcat(this->m_string.data(), str);
+        return *this;
+    }
+
+    template<class T>
+    basic_string<T> &basic_string<T>::operator+=(const char str) {
+        m_string.resize(1 + m_string.size());
+        ++m_length;
+        spt1::strcat(this->m_string.data(), str);
+        return *this;
+    }
+
+    template<class T>
+    basic_string<T> basic_string<T>::operator+(const char *str) {
+        uint64_t len = strlen(str);
+        m_string.resize(len + m_string.size());
+        m_length += len;
+        spt1::strcat(this->m_string.data(), str);
+        return *this;
+    }
+
+    template<class T>
+    basic_string<T> basic_string<T>::operator+(const char str) {
+        m_string.resize(1 + m_string.size());
+        ++m_length;
+        spt1::strcat(this->m_string.data(), str);
+        return *this;
+    }
+
+    template<class T>
+    T &basic_string<T>::at(uint64_t index) const {
+        return m_string.at(index);
     }
 
 
