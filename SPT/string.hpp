@@ -443,6 +443,7 @@ namespace spt {
     }
 
     const char *spt::strchr(const char *haystack, const char needle) {
+        ///TODO Make own implementation
         return std::strchr(haystack, needle);
     }
 
