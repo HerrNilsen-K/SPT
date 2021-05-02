@@ -6,6 +6,8 @@
 int main(int argc, char const *argv[]) {
     spt::string s("Hello");
     spt::string ss(" World");
+    std::cin >> ss;
+    std::cout << ss << std::endl;
     spt::string s2;
     s2 += s + ss + '!';
     std::cout << s2 + ' ' + "?" << std::endl;

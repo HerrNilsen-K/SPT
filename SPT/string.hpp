@@ -8,7 +8,6 @@
  *      replace()
  *      toUpper/Lower
  *      check for primitive type in template
- *      istream overload
  *  REFACTOR:
  */
 
@@ -135,7 +134,11 @@ namespace spt {
         bool operator!=(const basic_string &rhs) const;
 
         template<class U>
-        friend std::ostream &operator<<(std::ostream &os, const basic_string<U> &string);
+        friend std::ostream &operator<<(std::ostream &os, const basic_string<U> &str);
+
+        template<class U>
+        friend std::istream &operator>>(std::istream &is, const basic_string<U> &str);
+
 
     private:
         static memorySize strlen(const char *str);
@@ -157,8 +160,8 @@ namespace spt {
     }
 
     template<class T>
-    basic_string<T>::basic_string(const T *str)
-           {
+    basic_string<T>::basic_string(const T *str) {
+        m_length = spt::strlen(str);
         m_string.resize(m_length + 1);
         strcpy(m_string.data(), const_cast<T *>(str));
     }
@@ -180,8 +183,8 @@ namespace spt {
     }
 
     template<class U>
-    std::ostream &operator<<(std::ostream &os, const spt::basic_string<U> &string) {
-        os << string.m_string.data();
+    std::ostream &operator<<(std::ostream &os, const spt::basic_string<U> &str) {
+        os << str.m_string.data();
         return os;
     }
 
@@ -203,7 +206,7 @@ namespace spt {
     }
 
     template<class T>
-    T &basic_string<T>::operator[](memorySize index) const {
+    T &basic_string<T>::operator[](memorySize index) const noexcept {
         return m_string[index];
     }
 
@@ -362,6 +365,14 @@ namespace spt {
         if (pos == nullptr)
             throw -1;
         return pos - this->c_string();
+    }
+
+    template<class U>
+    std::istream &operator>>(std::istream &is, const basic_string<U> &str) {
+        char c[1024];
+        // TODO Ask Mr. Hardy if this is UB
+        is >> str.m_string.data();
+        return is;
     }
 
 
