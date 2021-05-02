@@ -18,6 +18,8 @@ int main(int argc, char const *argv[]) {
     for (auto i : r) {
         std::cout << (int) i << ' ';
     }
+    std::cout << std::endl;
+    std::cout << "Found at position: " << s2.find(s) << std::endl;
 
     return 0;
 }

@@ -5,8 +5,6 @@
 /*
  * TODO
  *  ADD:
- *      find()
- *      toString()
  *      replace()
  *      toUpper/Lower
  *      check for primitive type in template
@@ -51,6 +49,10 @@ namespace spt {
 
     void strcpy(char *dest, const char *src);
 
+    const char *strstr(const char *haystack, const char *needle);
+
+    const char *strchr(const char *haystack, const char needle);
+
 
     template<class T>
     class basic_string {
@@ -72,9 +74,20 @@ namespace spt {
 
         const T *c_string() const;
 
+        //Erase n elements after pos
         void erase(memorySize pos, memorySize n);
 
+        //Reserves memory, but doesn't change the size
         void reserve(memorySize n);
+
+        //Returns the index of the first occurence of the substring
+        //Throws -1 if no substring was found
+        memorySize find(const basic_string<T> &str);
+
+        memorySize find(const char c);
+
+        memorySize find(const char *str);
+
 
         iterator begin();
 
@@ -328,6 +341,30 @@ namespace spt {
         return m_string.at(index);
     }
 
+    template<class T>
+    typename basic_string<T>::memorySize basic_string<T>::find(const char *str) {
+        const char *pos = spt::strstr(this->c_string(), str);
+        if (pos == nullptr)
+            throw -1;
+        return pos - this->c_string();
+    }
+
+    template<class T>
+    typename basic_string<T>::memorySize basic_string<T>::find(const basic_string<T> &str) {
+        const char *pos = spt::strstr(this->c_string(), str.c_string());
+        if (pos == nullptr)
+            throw -1;
+        return pos - this->c_string();
+    }
+
+    template<class T>
+    typename basic_string<T>::memorySize basic_string<T>::find(const char c) {
+        const char *pos = spt::strchr(this->c_string(), c);
+        if (pos == nullptr)
+            throw -1;
+        return pos - this->c_string();
+    }
+
 
     void strcat(char *dest, const char *src) {
         while (*dest)
@@ -398,6 +435,15 @@ namespace spt {
         std::stringstream result;
         result << num;
         return string(result.str().c_str());
+    }
+
+    const char *strstr(const char *haystack, const char *needle) {
+        ///TODO Make own implementation
+        return std::strstr(haystack, needle);
+    }
+
+    const char *spt::strchr(const char *haystack, const char needle) {
+        return std::strchr(haystack, needle);
     }
 
 
