@@ -6,7 +6,6 @@
  * TODO
  *  ADD:
  *      replace()
- *      toUpper/Lower
  *      check for primitive type in template
  *  REFACTOR:
  */
@@ -19,6 +18,8 @@
 #include <ostream>
 #include <any>
 #include <sstream>
+#include <type_traits>
+#include <tuple>
 #include "vector.hpp"
 
 namespace spt {
@@ -65,7 +66,7 @@ namespace spt {
         using memorySize = typename spt::vector<T>::memorySize;
 
     public:
-        basic_string() = default;
+        basic_string();
 
         explicit basic_string(const T *str);
 
@@ -89,6 +90,17 @@ namespace spt {
 
         memorySize find(const char *str);
 
+        void toUpper();
+
+        void toUpper(memorySize i);
+
+        void toUpper(iterator start, iterator end);
+
+        void toLower();
+
+        void toLower(memorySize i);
+
+        void toLower(iterator start, iterator end);
 
         iterator begin();
 
@@ -355,7 +367,8 @@ namespace spt {
     typename basic_string<T>::memorySize basic_string<T>::find(const basic_string<T> &str) {
         const char *pos = spt::strstr(this->c_string(), str.c_string());
         if (pos == nullptr)
-            throw -1;
+            // TODO Make own exception
+            throw std::runtime_error("No substr found");
         return pos - this->c_string();
     }
 
@@ -363,7 +376,8 @@ namespace spt {
     typename basic_string<T>::memorySize basic_string<T>::find(const char c) {
         const char *pos = spt::strchr(this->c_string(), c);
         if (pos == nullptr)
-            throw -1;
+            // TODO Make own exception
+            throw std::runtime_error("No substr found");
         return pos - this->c_string();
     }
 
@@ -374,6 +388,46 @@ namespace spt {
         //str.clear();
         is >> str.m_string.data();
         return is;
+    }
+
+    template<class T>
+    basic_string<T>::basic_string() {
+    }
+
+    template<class T>
+    void basic_string<T>::toUpper() {
+        // TODO Make own toupper function for all overloads of basic_string::toUpper
+        for (auto &i : *this)
+            i = static_cast<T>(std::toupper(i));
+    }
+
+    template<class T>
+    void basic_string<T>::toUpper(basic_string::memorySize i) {
+        m_string.at(i) = static_cast<T>(std::toupper(m_string.at(i)));
+    }
+
+    template<class T>
+    void basic_string<T>::toUpper(basic_string::iterator start, basic_string::iterator end) {
+        for (auto i = start; i != end; ++i)
+            *i = static_cast<T>(std::toupper(*i));
+    }
+
+    template<class T>
+    void basic_string<T>::toLower() {
+        // TODO Make own tolower function for all overloads of basic_string::toLower
+        for (auto &i : *this)
+            i = static_cast<T>(std::tolower(i));
+    }
+
+    template<class T>
+    void basic_string<T>::toLower(basic_string::memorySize i) {
+        m_string.at(i) = static_cast<T>(std::tolower(m_string.at(i)));
+    }
+
+    template<class T>
+    void basic_string<T>::toLower(basic_string::iterator start, basic_string::iterator end) {
+        for (auto i = start; i != end; ++i)
+            *i = static_cast<T>(std::tolower(*i));
     }
 
 

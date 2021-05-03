@@ -6,10 +6,9 @@
 int main(int argc, char const *argv[]) {
     spt::string s("Hello ");
     spt::string ss(" World");
-    std::cin >> ss;
-    std::cout << ss << std::endl;
     spt::string s2;
     s2 += s + ss + '!';
+    s2.toUpper(s2.begin() + 2, s2.end());
     std::cout << s2 + ' ' + "?" << std::endl;
     std::cout << s2 << std::endl;
     std::string r;
@@ -21,7 +20,13 @@ int main(int argc, char const *argv[]) {
         std::cout << (int) i << ' ';
     }
     std::cout << std::endl;
-    std::cout << "Found at position: " << s2.find(s) << std::endl;
+    int pos;
+    try {
+        pos = s2.find(s);
+        std::cout << "Found at position: " << pos << std::endl;
+    } catch (std::exception &e) {
+        std::cout << e.what();
+    }
 
     return 0;
 }
