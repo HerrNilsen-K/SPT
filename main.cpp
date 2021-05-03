@@ -8,7 +8,7 @@ int main(int argc, char const *argv[]) {
     spt::string ss(" World");
     spt::string s2;
     s2 += s + ss + '!';
-    s2.toUpper(s2.begin() + 2, s2.end());
+    s2.toLower(s2.begin() + 2, s2.end());
     s2.replace(0, ss);
     std::cout << s2 + ' ' + "?" << std::endl;
     std::cout << s2 << std::endl;

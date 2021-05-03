@@ -2,14 +2,6 @@
 // Created by karl on 28.02.21.
 //
 
-/*
- * TODO
- *  ADD:
- *      replace()
- *      check for primitive type in template
- *  REFACTOR:
- */
-
 #ifndef SPT_STRING_HPP
 #define SPT_STRING_HPP
 
@@ -54,6 +46,10 @@ namespace spt {
 
     const char *strchr(const char *haystack, const char needle);
 
+    char toUpper(char c);
+
+    char toLower(char c);
+
 
     template<class T>
     class basic_string {
@@ -77,6 +73,9 @@ namespace spt {
         const T *c_string() const;
 
         memorySize size() const;
+
+        //Clear the string
+        void clear();
 
         //Erase n elements after pos
         void erase(memorySize pos, memorySize n);
@@ -403,8 +402,6 @@ namespace spt {
     template<class U>
     std::istream &operator>>(std::istream &is, const basic_string<U> &str) {
         char c[1024];
-        // TODO make a clear function
-        //str.clear();
         is >> str.m_string.data();
         return is;
     }
@@ -415,38 +412,36 @@ namespace spt {
 
     template<class T>
     void basic_string<T>::toUpper() {
-        // TODO Make own toupper function for all overloads of basic_string::toUpper
         for (auto &i : *this)
-            i = static_cast<T>(std::toupper(i));
+            i = static_cast<T>(spt::toUpper(i));
     }
 
     template<class T>
     void basic_string<T>::toUpper(basic_string::memorySize i) {
-        m_string.at(i) = static_cast<T>(std::toupper(m_string.at(i)));
+        m_string.at(i) = static_cast<T>(spt::toUpper(m_string.at(i)));
     }
 
     template<class T>
     void basic_string<T>::toUpper(basic_string::iterator start, basic_string::iterator end) {
         for (auto i = start; i != end; ++i)
-            *i = static_cast<T>(std::toupper(*i));
+            *i = static_cast<T>(spt::toUpper(*i));
     }
 
     template<class T>
     void basic_string<T>::toLower() {
-        // TODO Make own tolower function for all overloads of basic_string::toLower
         for (auto &i : *this)
-            i = static_cast<T>(std::tolower(i));
+            i = static_cast<T>(spt::toLower(i));
     }
 
     template<class T>
     void basic_string<T>::toLower(basic_string::memorySize i) {
-        m_string.at(i) = static_cast<T>(std::tolower(m_string.at(i)));
+        m_string.at(i) = static_cast<T>(spt::toLower(m_string.at(i)));
     }
 
     template<class T>
     void basic_string<T>::toLower(basic_string::iterator start, basic_string::iterator end) {
         for (auto i = start; i != end; ++i)
-            *i = static_cast<T>(std::tolower(*i));
+            *i = static_cast<T>(spt::toLower(*i));
     }
 
     template<class T>
@@ -467,6 +462,13 @@ namespace spt {
     template<class T>
     typename basic_string<T>::memorySize basic_string<T>::size() const {
         return m_length;
+    }
+
+    template<class T>
+    void basic_string<T>::clear() {
+        m_string.clear();
+        m_string.push_back('\0');
+        m_length = 0;
     }
 
 
@@ -549,6 +551,14 @@ namespace spt {
     const char *spt::strchr(const char *haystack, const char needle) {
         ///TODO Make own implementation
         return std::strchr(haystack, needle);
+    }
+
+    char toUpper(char c) {
+        return (c >= 'a' && c <= 'z') ? c - 32 : c;
+    }
+
+    char toLower(char c) {
+        return (c >= 'A' && c <= 'Z') ? c + 32 : c;
     }
 
 
