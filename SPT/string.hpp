@@ -144,6 +144,8 @@ namespace spt {
 
         basic_string &operator+=(char str);
 
+        basic_string &operator=(const char *str);
+
         basic_string &operator=(const basic_string &str);
 
         T &operator[](memorySize index) const noexcept;
@@ -193,6 +195,7 @@ namespace spt {
     basic_string<T>::basic_string(const T *str) {
         m_length = spt::strlen(str);
         m_string.resize(m_length + 1);
+        m_string.at(m_length) = '\0';
         strcpy(m_string.data(), const_cast<T *>(str));
     }
 
@@ -469,6 +472,12 @@ namespace spt {
         m_string.clear();
         m_string.push_back('\0');
         m_length = 0;
+    }
+
+    template<class T>
+    basic_string<T> &basic_string<T>::operator=(const char *str) {
+        *this = basic_string<T>(str);
+        return *this;
     }
 
 
