@@ -5,6 +5,7 @@
 
 int main(int argc, char const *argv[]) {
     spt::string s("Hello ");
+    s += spt::toString((int)55);
     spt::string ss(" World");
     spt::string s2;
     s2 += s + ss + '!';

@@ -26,19 +26,19 @@ namespace spt {
 
     uint64_t strlen(const char *str);
 
-    basic_string<char> toString(short num);
+    string toString(short num);
 
-    basic_string<char> toString(int num);
+    string toString(int num);
 
-    basic_string<char> toString(long num);
+    string toString(long num);
 
-    basic_string<char> toString(long long num);
+    string toString(long long num);
 
-    basic_string<char> toString(float num);
+    string toString(float num);
 
-    basic_string<char> toString(double num);
+    string toString(double num);
 
-    basic_string<char> toString(long double num);
+    string toString(long double num);
 
     void strcpy(char *dest, const char *src);
 
@@ -500,47 +500,46 @@ namespace spt {
         }
     }
 
-    //TODO Remove sstream for all to implementations
-    basic_string<char> spt::toString(short num) {
-        std::stringstream result;
-        result << num;
-        return string(result.str().c_str());
+    string spt::toString(short num) {
+        char buf[25];
+        sprintf(buf, "%i", num);
+        return string(buf);
     }
 
     string toString(int num) {
-        std::stringstream result;
-        result << num;
-        return string(result.str().c_str());
+        char buf[25];
+        sprintf(buf, "%i", num);
+        return string(buf);
     }
 
-    basic_string<char> spt::toString(long num) {
-        std::stringstream result;
-        result << num;
-        return string(result.str().c_str());
+    string spt::toString(long num) {
+        char buf[25];
+        sprintf(buf, "%li", num);
+        return string(buf);
     }
 
-    basic_string<char> spt::toString(long long int num) {
-        std::stringstream result;
-        result << num;
-        return string(result.str().c_str());
+    string spt::toString(long long int num) {
+        char buf[25];
+        sprintf(buf, "%lli", num);
+        return string(buf);
     }
 
-    basic_string<char> spt::toString(float num) {
-        std::stringstream result;
-        result << num;
-        return string(result.str().c_str());
+    string spt::toString(float num) {
+        char buf[25];
+        sprintf(buf, "%f", num);
+        return string(buf);
     }
 
-    basic_string<char> spt::toString(double num) {
-        std::stringstream result;
-        result << num;
-        return string(result.str().c_str());
+    string spt::toString(double num) {
+        char buf[25];
+        sprintf(buf, "%f", num);
+        return string(buf);
     }
 
-    basic_string<char> spt::toString(long double num) {
-        std::stringstream result;
-        result << num;
-        return string(result.str().c_str());
+    string spt::toString(long double num) {
+        char buf[25];
+        sprintf(buf, "%Lf", num);
+        return string(buf);
     }
 
     const char *strstr(const char *haystack, const char *needle) {
