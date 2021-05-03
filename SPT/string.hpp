@@ -76,6 +76,8 @@ namespace spt {
 
         const T *c_string() const;
 
+        memorySize size() const;
+
         //Erase n elements after pos
         void erase(memorySize pos, memorySize n);
 
@@ -90,17 +92,34 @@ namespace spt {
 
         memorySize find(const char *str);
 
+        //Transform chars to upper/lower:
+
+        //The entire string
         void toUpper();
 
+        //A single char at index i
         void toUpper(memorySize i);
 
+        //An substring from start to end
         void toUpper(iterator start, iterator end);
 
+        //The entire string
         void toLower();
 
+        //A single char at index i
         void toLower(memorySize i);
 
+        //An substring from start to end
         void toLower(iterator start, iterator end);
+
+        //Replace index i with c
+        void replace(memorySize i, char c);
+
+        //Replace after i - 1 with str for strlen(str)
+        void replace(memorySize i, const char *str);
+
+        //Replace after i - 1 with str for str.length()
+        void replace(memorySize i, const basic_string<T> &str);
 
         iterator begin();
 
@@ -428,6 +447,26 @@ namespace spt {
     void basic_string<T>::toLower(basic_string::iterator start, basic_string::iterator end) {
         for (auto i = start; i != end; ++i)
             *i = static_cast<T>(std::tolower(*i));
+    }
+
+    template<class T>
+    void basic_string<T>::replace(basic_string::memorySize i, char c) {
+        m_string.at(i) = c;
+    }
+
+    template<class T>
+    void basic_string<T>::replace(basic_string::memorySize i, const char *str) {
+        spt::strcpy(begin() + i, str);
+    }
+
+    template<class T>
+    void basic_string<T>::replace(basic_string::memorySize i, const basic_string<T> &str) {
+        spt::strcpy(begin() + i, str.c_string());
+    }
+
+    template<class T>
+    typename basic_string<T>::memorySize basic_string<T>::size() const {
+        return m_length;
     }
 
 
