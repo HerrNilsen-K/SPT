@@ -350,6 +350,7 @@ namespace spt {
     template<class T>
     vector<T>::vector(std::initializer_list<T> l)
             :m_size(0), m_maxAlloc(0) {
+        m_data = static_cast<T *>(std::calloc(1, sizeof(T)));
         resize(l.size());
         std::copy(l.begin(), l.end(), this->begin());
     }

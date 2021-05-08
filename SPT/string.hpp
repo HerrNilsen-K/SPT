@@ -134,7 +134,7 @@ namespace spt {
 
         basic_string operator+(const basic_string &str);
 
-        basic_string operator+(const char *str);
+        basic_string operator+(const char *str) const;
 
         basic_string operator+(char str);
 
@@ -182,13 +182,16 @@ namespace spt {
 
     template<class T>
     basic_string<T>::basic_string(const basic_string<T> &str) {
-        this->m_length = str.m_length;
+        /*this->m_length = str.m_length;
         this->m_string = str.m_string;
         if (this->m_string.size() > this->m_string.capacity()) {
             this->m_string[this->m_string.size() + 1] = '\0';
         } else {
             this->m_string.push_back('\0');
         }
+         */
+        this->m_string = str.m_string;
+        this->m_length = str.m_length;
     }
 
     template<class T>
@@ -355,12 +358,21 @@ namespace spt {
     }
 
     template<class T>
-    basic_string<T> basic_string<T>::operator+(const char *str) {
+    basic_string<T> basic_string<T>::operator+(const char *str) const {
+        /*
         memorySize len = spt::strlen(str);
         m_string.resize(len + m_string.size());
         m_length += len;
         spt::strcat(this->m_string.data(), str);
         return *this;
+         */
+
+        basic_string<T> result = *this;
+        memorySize len = spt::strlen(str);
+        result.m_string.resize(len + result.m_length + 1);
+        result.m_length += len;
+        spt::strcat(result.m_string.data(), str);
+        return result;
     }
 
     template<class T>
@@ -482,9 +494,13 @@ namespace spt {
 
 
     void strcat(char *dest, const char *src) {
-        while (*dest)
+        /*while (*dest)
             dest++;
-        while ((*dest++ = *src++));
+        while ((*dest++ = *src++)){
+            int i;
+            i = 0;
+        }*/
+        std::strcat(dest, src);
     }
 
     void strcat(char *dest, const char src) {

@@ -18,10 +18,9 @@ int main(int argc, char const *argv[]) {
     try {
         pos = s2.find(s);
         std::cout << "Found at position: " << pos << std::endl;
-    } catch (std::exception &e) {
-        std::cout << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "Substring not found" << std::endl;
     }
-
 
     spt::string A("Hallo"), B;
     A = "Guten Tag,";
@@ -32,6 +31,10 @@ int main(int argc, char const *argv[]) {
     A = A + spt::toString(14);
     A += B;
     std::cout << A << std::endl;
+
+    spt::string test;
+    test = test + "Hello";
+    std::cout << test << std::endl;
 
     return 0;
 }
