@@ -132,11 +132,11 @@ namespace spt {
 
         reverse_iterator rend();
 
-        basic_string operator+(const basic_string &str);
+        basic_string operator+(const basic_string &str) const;
 
         basic_string operator+(const char *str) const;
 
-        basic_string operator+(char str);
+        basic_string operator+(char str) const;
 
         basic_string &operator+=(const basic_string &str);
 
@@ -309,11 +309,18 @@ namespace spt {
     }
 
     template<class T>
-    basic_string<T> basic_string<T>::operator+(const basic_string &str) {
-        m_string.resize(str.m_length + m_string.size());
+    basic_string<T> basic_string<T>::operator+(const basic_string &str) const {
+        /*m_string.resize(str.m_length + m_string.size());
         m_length += str.m_length;
         spt::strcat(this->m_string.data(), str.m_string.data());
         return *this;
+        */
+
+        basic_string<T> result = *this;
+        result.m_string.resize(result.m_length + str.m_length + 1);
+        result.m_length += str.m_length;
+        spt::strcat(result.m_string.data(), str.c_string());
+        return result;
     }
 
     template<class T>
@@ -334,8 +341,8 @@ namespace spt {
 
     template<class T>
     basic_string<T> &basic_string<T>::operator+=(const basic_string &str) {
-        m_string.resize(str.m_length + m_string.size());
         m_length += str.m_length;
+        m_string.resize(str.m_length + m_length);
         spt::strcat(this->m_string.data(), str.m_string.data());
         return *this;
     }
@@ -376,11 +383,18 @@ namespace spt {
     }
 
     template<class T>
-    basic_string<T> basic_string<T>::operator+(const char str) {
-        m_string.resize(1 + m_string.size());
+    basic_string<T> basic_string<T>::operator+(const char str) const {
+        /*m_string.resize(1 + m_string.size());
         ++m_length;
         spt::strcat(this->m_string.data(), str);
         return *this;
+         */
+
+        basic_string<T> result = *this;
+        result.m_length++;
+        result.m_string.resize(result.m_length + 1);
+        spt::strcat(result.m_string.data(), str);
+        return result;
     }
 
     template<class T>
@@ -494,13 +508,9 @@ namespace spt {
 
 
     void strcat(char *dest, const char *src) {
-        /*while (*dest)
+        while (*dest)
             dest++;
-        while ((*dest++ = *src++)){
-            int i;
-            i = 0;
-        }*/
-        std::strcat(dest, src);
+        while ((*dest++ = *src++));
     }
 
     void strcat(char *dest, const char src) {

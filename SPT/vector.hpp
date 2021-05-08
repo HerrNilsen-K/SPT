@@ -163,6 +163,9 @@ namespace spt {
             memorySize newSize = sizeof(T) * size;
             m_data = static_cast<T *>(realloc(m_data, newSize));
             m_maxAlloc = newSize / sizeof(T);
+            for (memorySize i = m_size; i < newSize; ++i)
+                //m_data[i] = (T) 0;
+                new(m_data + i) T();
         }
         m_size = size;
     }
