@@ -36,5 +36,8 @@ int main(int argc, char const *argv[]) {
     test = test + "Hello";
     std::cout << test << std::endl;
 
+
+    spt::vector<int> v(3,3);
+    v.push_back(3);
     return 0;
 }
