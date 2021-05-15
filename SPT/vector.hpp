@@ -103,7 +103,7 @@ namespace spt {
 
     private:
         //Resize the buffer without safety checks
-        void enlargeBuffer(memorySize newSize);
+        void enlargeBuffer(memorySize newSize, memorySize oldSize);
 
         T *m_data = nullptr;
         memorySize m_size;
@@ -140,7 +140,8 @@ namespace spt {
             memorySize newSize = sizeof(T) * m_size * 2;
             //m_data = static_cast<T *>(std::realloc(m_data, newSize));
             m_maxAlloc = newSize / sizeof(T);
-            enlargeBuffer(m_maxAlloc);
+            //Pass size before increment
+            enlargeBuffer(m_maxAlloc, m_size - 1);
             m_data[m_size - 1] = data;
 #ifdef VEC_DEBUG
             std::cout << std::endl
@@ -168,7 +169,7 @@ namespace spt {
             memorySize newSize = sizeof(T) * size;
             //m_data = static_cast<T *>(realloc(m_data, newSize));
             m_maxAlloc = newSize / sizeof(T);
-            enlargeBuffer(size);
+            enlargeBuffer(size, m_size);
         }
         m_size = size;
     }
@@ -247,8 +248,7 @@ namespace spt {
     template<class T>
     void vector<T>::shrink_to_fit() {
         if (m_size != m_maxAlloc) {
-            //m_data = static_cast<T *>(std::realloc(m_data, sizeof(T) * m_size));
-            enlargeBuffer(m_size);
+            enlargeBuffer(m_size, m_size);
             m_maxAlloc = m_size;
         }
     }
@@ -262,7 +262,8 @@ namespace spt {
         if (this->m_maxAlloc < lhs.m_maxAlloc) {
             this->m_maxAlloc = lhs.m_maxAlloc;
             //this->m_data = static_cast<T *>(std::realloc(this->m_data, sizeof(T) * this->m_size));
-            enlargeBuffer(this->m_size);
+            //TODO Watch allocation
+            enlargeBuffer(this->m_size, 0);
         }
         std::memcpy(this->m_data, lhs.m_data, this->m_size);
         return *this;
@@ -370,7 +371,7 @@ namespace spt {
         if (m_maxAlloc < size) {
             m_maxAlloc = size;
             //m_data = static_cast<T *>(std::realloc(m_data, size * sizeof(T)));
-            enlargeBuffer(size);
+            enlargeBuffer(size, m_maxAlloc);
         }
     }
 
@@ -394,11 +395,11 @@ namespace spt {
     }
 
     template<class T>
-    void vector<T>::enlargeBuffer(memorySize newSize) {
+    void vector<T>::enlargeBuffer(memorySize newSize, memorySize oldSize) {
         typedef char byte;
 
         byte *new_storage = new byte[newSize * sizeof(T)];
-        for (unsigned i = 0; i < m_size; ++i) {
+        for (unsigned i = 0; i < oldSize; ++i) {
             T *item = reinterpret_cast<T *>(m_data + i);
             //TODO Something here must be wrong
             new(new_storage + i * sizeof(T)) T(std::move(*item));

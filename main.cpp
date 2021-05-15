@@ -38,6 +38,8 @@ int main(int argc, char const *argv[]) {
 
 
     spt::vector<int> v(3,3);
-    v.push_back(3);
+    v.push_back(4);
+    for(auto i : v)
+        std::cout << i << ' ';
     return 0;
 }
