@@ -41,5 +41,17 @@ int main(int argc, char const *argv[]) {
     v.push_back(4);
     for(auto i : v)
         std::cout << i << ' ';
+
+
+    /*spt::string s("Hello ");
+    s += spt::toString( 55);
+    spt::string ss(" World");
+    spt::string s2;
+    s2 += s + ss + '!';
+    std::cout << s2 << std::endl;
+    std::cout << ((int) *(s2.end() - 1));
+     */
+
+
     return 0;
 }

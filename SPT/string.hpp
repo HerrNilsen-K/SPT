@@ -24,6 +24,10 @@ namespace spt {
 
     void strcat(char *dest, const char src);
 
+    void strcat(char *dest, uint64_t size, const char *src);
+
+    void strcat(char *dest, uint64_t size, const char src);
+
     uint64_t strlen(const char *str);
 
     string toString(short num);
@@ -169,7 +173,7 @@ namespace spt {
         friend std::ostream &operator<<(std::ostream &os, const basic_string<U> &str);
 
         template<class U>
-        friend std::istream &operator>>(std::istream &is, const basic_string<U> &str);
+        friend std::istream &operator>>(std::istream &is, basic_string<U> &str);
 
 
     private:
@@ -318,8 +322,9 @@ namespace spt {
 
         basic_string<T> result = *this;
         result.m_string.resize(result.m_length + str.m_length + 1);
+        //Resize m_length after strcat call
+        spt::strcat(result.m_string.data(), result.m_length, str.c_string());
         result.m_length += str.m_length;
-        spt::strcat(result.m_string.data(), str.c_string());
         return result;
     }
 
@@ -341,9 +346,9 @@ namespace spt {
 
     template<class T>
     basic_string<T> &basic_string<T>::operator+=(const basic_string &str) {
+        m_string.resize(str.m_length + m_length + 1);
+        spt::strcat(this->m_string.data(), this->m_length, str.m_string.data());
         m_length += str.m_length;
-        m_string.resize(str.m_length + m_length);
-        spt::strcat(this->m_string.data(), str.m_string.data());
         return *this;
     }
 
@@ -393,7 +398,7 @@ namespace spt {
         basic_string<T> result = *this;
         result.m_length++;
         result.m_string.resize(result.m_length + 1);
-        spt::strcat(result.m_string.data(), str);
+        spt::strcat(result.m_string.data(), result.m_length, str);
         return result;
     }
 
@@ -429,9 +434,10 @@ namespace spt {
     }
 
     template<class U>
-    std::istream &operator>>(std::istream &is, const basic_string<U> &str) {
+    std::istream &operator>>(std::istream &is, basic_string<U> &str) {
         char c[1024];
-        is >> str.m_string.data();
+        is >> c;
+        str = c;
         return is;
     }
 
@@ -469,7 +475,7 @@ namespace spt {
 
     template<class T>
     void basic_string<T>::toLower(basic_string::iterator start, basic_string::iterator end) {
-        for (auto i = start; i != end; ++i)
+        for (auto i = start; i != end - 1; ++i)
             *i = static_cast<T>(spt::toLower(*i));
     }
 
@@ -510,13 +516,22 @@ namespace spt {
     void strcat(char *dest, const char *src) {
         while (*dest)
             dest++;
-        while ((*dest++ = *src++));
+        //while ((*dest++ = *src++));
+        while (*src) {
+            *dest = *src;
+            ++dest;
+            ++src;
+        }
+        //TODO Manage nullT
+        //*dest = '\0';
     }
 
     void strcat(char *dest, const char src) {
         while (*dest)
             dest++;
         *dest = src;
+        dest++;
+        *dest = '\0';
     }
 
     uint64_t strlen(const char *str) {
@@ -593,6 +608,22 @@ namespace spt {
 
     char toLower(char c) {
         return (c >= 'A' && c <= 'Z') ? c + 32 : c;
+    }
+
+    void spt::strcat(char *dest, uint64_t size, const char *src) {
+        dest += size;
+        while(*src) {
+            *dest = *src;
+            ++dest; ++src;
+        }
+        *dest = '\0';
+    }
+
+    void spt::strcat(char *dest, uint64_t size, const char src) {
+        dest += size - 1;
+        *dest = src;
+        ++dest;
+        *dest = '\0';
     }
 
 
