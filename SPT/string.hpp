@@ -548,7 +548,7 @@ namespace spt {
         }
     }
 
-    string spt::toString(short num) {
+    string toString(short num) {
         char buf[25];
         sprintf(buf, "%i", num);
         return string(buf);
@@ -560,31 +560,31 @@ namespace spt {
         return string(buf);
     }
 
-    string spt::toString(long num) {
+    string toString(long num) {
         char buf[25];
         sprintf(buf, "%li", num);
         return string(buf);
     }
 
-    string spt::toString(long long int num) {
+    string toString(long long int num) {
         char buf[25];
         sprintf(buf, "%lli", num);
         return string(buf);
     }
 
-    string spt::toString(float num) {
+    string toString(float num) {
         char buf[25];
         sprintf(buf, "%f", num);
         return string(buf);
     }
 
-    string spt::toString(double num) {
+    string toString(double num) {
         char buf[25];
         sprintf(buf, "%f", num);
         return string(buf);
     }
 
-    string spt::toString(long double num) {
+    string toString(long double num) {
         char buf[25];
         sprintf(buf, "%Lf", num);
         return string(buf);
@@ -595,7 +595,7 @@ namespace spt {
         return std::strstr(haystack, needle);
     }
 
-    const char *spt::strchr(const char *haystack, const char needle) {
+    const char *strchr(const char *haystack, const char needle) {
         ///TODO Make own implementation
         return std::strchr(haystack, needle);
     }
@@ -608,7 +608,7 @@ namespace spt {
         return (c >= 'A' && c <= 'Z') ? c + 32 : c;
     }
 
-    void spt::strcat(char *dest, uint64_t size, const char *src) {
+    void strcat(char *dest, uint64_t size, const char *src) {
         dest += size;
         while(*src) {
             *dest = *src;
@@ -617,7 +617,7 @@ namespace spt {
         *dest = '\0';
     }
 
-    void spt::strcat(char *dest, uint64_t size, const char src) {
+    void strcat(char *dest, uint64_t size, const char src) {
         dest += size - 1;
         *dest = src;
         ++dest;
