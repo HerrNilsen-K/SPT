@@ -14,23 +14,22 @@ int main(int argc, char const *argv[]) {
     //Finding substrings
     int pos;
     try {
-        pos = (int)s2.find(str);
-        std::cout << "Substring found at position: " << pos << std::endl;
+        pos = (int) s2.find(str);
+        std::cout << "Substring found at position: " << pos << std::endl << std::endl;
     } catch (...) {
-        std::cout << "Substring not found" << std::endl;
+        std::cout << "Substring not found" << std::endl << std::endl;
     }
     //Transformation
     s2.toLower(s2.begin() + 2, s2.end());
     s2.replace(0, ss);
     std::cout << s2 + ' ' + "?" << std::endl;
-    std::cout << s2 << std::endl;
     std::cout << std::endl;
 
     //Capability with the stl
     std::shuffle(s2.begin(), s2.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
     for(auto c : s2)
         std::cout << c;
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 
     //Mr. Hardys example
     spt::string A("Hallo"), B;
@@ -41,7 +40,7 @@ int main(int argc, char const *argv[]) {
     B = "Uhr";
     A = A + spt::toString(14);
     A += B;
-    std::cout << A << std::endl;
+    std::cout << A << std::endl << std::endl;
 
     //Move sematics
     spt::string m1, m2("Move");
