@@ -296,6 +296,7 @@ namespace spt {
         if (this != &v) {
             this->m_size = v.m_size;
             this->m_maxAlloc = v.m_maxAlloc;
+            delete[] this->m_data;
             this->m_data = v.m_data;
             v.m_data = nullptr;
         }
@@ -306,6 +307,7 @@ namespace spt {
         if (this != &lhs) {
             this->m_size = lhs.m_size;
             this->m_maxAlloc = lhs.m_maxAlloc;
+            delete[] this->m_data;
             this->m_data = lhs.m_data;
             lhs.m_data = nullptr;
         }

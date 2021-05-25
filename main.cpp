@@ -43,5 +43,11 @@ int main(int argc, char const *argv[]) {
     A += B;
     std::cout << A << std::endl;
 
+    //Move sematics
+    spt::string m1, m2("Move");
+    m1 = std::move(m2);
+    spt::string m3(m1);
+    std::cout << m3 << std::endl;
+
     return 0;
 }

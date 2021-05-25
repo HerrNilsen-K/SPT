@@ -60,9 +60,9 @@ namespace spt {
         using memorySize = typename spt::vector<T>::memorySize;
 
     public:
-        basic_string();
+        basic_string() = default;
 
-        explicit basic_string(const T *str);
+        basic_string(const T *str);
 
         basic_string(const basic_string &str);
 
@@ -146,6 +146,8 @@ namespace spt {
 
         basic_string &operator=(const basic_string &str);
 
+        basic_string &operator=(basic_string &&str) noexcept;
+
         T &operator[](memorySize index) const noexcept;
 
         //Out of bounce safe indexing
@@ -202,10 +204,12 @@ namespace spt {
 
     template<class T>
     basic_string<T>::basic_string(basic_string &&str) noexcept {
-        this->m_length = str.m_length;
-        this->m_string = std::move(str.m_string);
-        str.m_string.clear();
-        str.m_string.shrink_to_fit();
+        if (this != &str) {
+            this->m_length = str.m_length;
+            this->m_string = std::move(str.m_string);
+
+            str.m_length = 0;
+        }
     }
 
     template<class T>
@@ -417,10 +421,6 @@ namespace spt {
     }
 
     template<class T>
-    basic_string<T>::basic_string() {
-    }
-
-    template<class T>
     void basic_string<T>::toUpper() {
         for (auto &i : *this)
             i = static_cast<T>(spt::toUpper(i));
@@ -484,6 +484,17 @@ namespace spt {
     template<class T>
     basic_string<T> &basic_string<T>::operator=(const char *str) {
         *this = basic_string<T>(str);
+        return *this;
+    }
+
+    template<class T>
+    basic_string<T> &basic_string<T>::operator=(basic_string &&str) noexcept {
+        if (this != &str) {
+            this->m_length = str.m_length;
+            this->m_string = std::move(str.m_string);
+
+            str.m_length = 0;
+        }
         return *this;
     }
 
