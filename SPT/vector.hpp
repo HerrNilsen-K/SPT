@@ -106,8 +106,8 @@ namespace spt {
         void enlargeBuffer(memorySize newSize, memorySize oldSize);
 
         T *m_data = nullptr;
-        memorySize m_size;
-        memorySize m_maxAlloc;
+        memorySize m_size = 0;
+        memorySize m_maxAlloc = 0;
     };
 
     template<class T>
@@ -293,18 +293,22 @@ namespace spt {
 
     template<class T>
     vector<T>::vector(vector &&v) noexcept {
-        this->m_size = v.m_size;
-        this->m_maxAlloc = v.m_maxAlloc;
-        this->m_data = v.m_data;
-        v.m_data = nullptr;
+        if (this != &v) {
+            this->m_size = v.m_size;
+            this->m_maxAlloc = v.m_maxAlloc;
+            this->m_data = v.m_data;
+            v.m_data = nullptr;
+        }
     }
 
     template<class T>
     vector<T> &vector<T>::operator=(vector &&lhs) noexcept {
-        this->m_size = lhs.m_size;
-        this->m_maxAlloc = lhs.m_maxAlloc;
-        this->m_data = lhs.m_data;
-        lhs.m_data = nullptr;
+        if (this != &lhs) {
+            this->m_size = lhs.m_size;
+            this->m_maxAlloc = lhs.m_maxAlloc;
+            this->m_data = lhs.m_data;
+            lhs.m_data = nullptr;
+        }
         return *this;
     }
 
