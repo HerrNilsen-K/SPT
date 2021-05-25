@@ -18,10 +18,6 @@ namespace spt {
 
     using string = basic_string<char>;
 
-    void strcat(char *dest, const char *src);
-
-    void strcat(char *dest, const char src);
-
     void strcat(char *dest, uint64_t size, const char *src);
 
     void strcat(char *dest, uint64_t size, const char src);
@@ -313,12 +309,6 @@ namespace spt {
 
     template<class T>
     basic_string<T> basic_string<T>::operator+(const basic_string &str) const {
-        /*m_string.resize(str.m_length + m_string.size());
-        m_length += str.m_length;
-        spt::strcat(this->m_string.data(), str.m_string.data());
-        return *this;
-        */
-
         basic_string<T> result = *this;
         result.m_string.resize(result.m_length + str.m_length + 1);
         //Resize m_length after strcat call
@@ -370,14 +360,6 @@ namespace spt {
 
     template<class T>
     basic_string<T> basic_string<T>::operator+(const char *str) const {
-        /*
-        memorySize len = spt::strlen(str);
-        m_string.resize(len + m_string.size());
-        m_length += len;
-        spt::strcat(this->m_string.data(), str);
-        return *this;
-         */
-
         basic_string<T> result = *this;
         memorySize len = spt::strlen(str);
         result.m_string.resize(len + result.m_length + 1);
@@ -388,12 +370,6 @@ namespace spt {
 
     template<class T>
     basic_string<T> basic_string<T>::operator+(const char str) const {
-        /*m_string.resize(1 + m_string.size());
-        ++m_length;
-        spt::strcat(this->m_string.data(), str);
-        return *this;
-         */
-
         basic_string<T> result = *this;
         result.m_length++;
         result.m_string.resize(result.m_length + 1);
@@ -509,28 +485,6 @@ namespace spt {
     basic_string<T> &basic_string<T>::operator=(const char *str) {
         *this = basic_string<T>(str);
         return *this;
-    }
-
-
-    void strcat(char *dest, const char *src) {
-        while (*dest)
-            dest++;
-        //while ((*dest++ = *src++));
-        while (*src) {
-            *dest = *src;
-            ++dest;
-            ++src;
-        }
-        //TODO Manage nullT
-        //*dest = '\0';
-    }
-
-    void strcat(char *dest, const char src) {
-        while (*dest)
-            dest++;
-        *dest = src;
-        dest++;
-        *dest = '\0';
     }
 
     uint64_t strlen(const char *str) {
