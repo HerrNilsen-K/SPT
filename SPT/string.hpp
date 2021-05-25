@@ -263,7 +263,8 @@ namespace spt {
 
     template<class T>
     typename basic_string<T>::iterator basic_string<T>::end() {
-        return m_string.end();
+        //end - 1 to ignore nullT
+        return m_string.end() - 1;
     }
 
     template<class T>
