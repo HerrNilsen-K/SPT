@@ -354,8 +354,8 @@ namespace spt {
     basic_string<T> &basic_string<T>::operator+=(const char *str) {
         memorySize len = spt::strlen(str);
         m_string.resize(len + m_string.size());
+        spt::strcat(this->m_string.data(), this->m_length, str);
         m_length += len;
-        spt::strcat(this->m_string.data(), str);
         return *this;
     }
 
@@ -380,8 +380,8 @@ namespace spt {
         basic_string<T> result = *this;
         memorySize len = spt::strlen(str);
         result.m_string.resize(len + result.m_length + 1);
+        spt::strcat(result.m_string.data(), this->m_length, str);
         result.m_length += len;
-        spt::strcat(result.m_string.data(), str);
         return result;
     }
 

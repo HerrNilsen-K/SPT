@@ -4,11 +4,11 @@
 #include <algorithm>
 
 int main(int argc, char const *argv[]) {
-    spt::string s("Hello ");
-    s += spt::toString((int) 55);
+    spt::string str("Hello ");
+    str += spt::toString((int) 55);
     spt::string ss(" World");
     spt::string s2;
-    s2 += s + ss + '!';
+    s2 += str + ss + '!';
     s2.toLower(s2.begin() + 2, s2.end());
     s2.replace(0, ss);
     std::cout << s2 + ' ' + "?" << std::endl;
@@ -16,7 +16,7 @@ int main(int argc, char const *argv[]) {
     std::cout << std::endl;
     int pos;
     try {
-        pos = s2.find(s);
+        pos = s2.find(str);
         std::cout << "Found at position: " << pos << std::endl;
     } catch (...) {
         std::cout << "Substring not found" << std::endl;
@@ -32,25 +32,11 @@ int main(int argc, char const *argv[]) {
     A += B;
     std::cout << A << std::endl;
 
-    spt::string test;
-    test = test + "Hello";
-    std::cout << test << std::endl;
 
+    spt::string mstr("Hello");
+    std::cout << mstr + 'e' + 'e';
+    std::cout << mstr;
 
-    spt::vector<int> v(3,3);
-    v.push_back(4);
-    for(auto i : v)
-        std::cout << i << ' ';
-
-
-    /*spt::string s("Hello ");
-    s += spt::toString( 55);
-    spt::string ss(" World");
-    spt::string s2;
-    s2 += s + ss + '!';
-    std::cout << s2 << std::endl;
-    std::cout << ((int) *(s2.end() - 1));
-     */
 
 
     return 0;
